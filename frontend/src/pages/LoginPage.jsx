@@ -4,7 +4,6 @@ import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authSlice";
 import { ImSpinner2 } from "react-icons/im";
-import axios from "axios";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -22,7 +21,24 @@ const LoginPage = () => {
         toast.success("Login successful!");
         navigate("/todo");
       } else {
-        throw new Error(resultAction.error.message);
+        const backendMessage =
+          resultAction.payload || resultAction.error?.message || "Login failed";
+
+        if (
+          backendMessage.toLowerCase().includes("user") &&
+          backendMessage.toLowerCase().includes("not")
+        ) {
+          toast.error("User not found. Please register first.");
+        } else if (
+          backendMessage.toLowerCase().includes("invalid") ||
+          backendMessage.toLowerCase().includes("password")
+        ) {
+          toast.error("Invalid email or password.");
+        } else {
+          toast.error(backendMessage);
+        }
+
+        console.error("Login error:", backendMessage);
       }
     } catch (error) {
       console.error("Login error:", error);
