@@ -9,26 +9,44 @@ import todoRoutes from "./routes/todo.js";
 dotenv.config();
 const app = express();
 
-// app.use(cors());
+const allowedOrigins = [
+  "https://todo-ch0v9vslr-dinsan-js-projects.vercel.app",
+  "https://todoapp-gules-three.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("❌ Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("🚀 API is running successfully!");
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/todos", todoRoutes);
 
-// Start the server
-app.listen(5000, () => {
-  console.log("🚀 Server running on port 5000");
+const PORT = process.env.PORT || 5000;
 
-  // MongoDB connection
-  mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => console.log("✅ MongoDB Connected"))
-    .catch((err) => console.error("❌ MongoDB Error:", err));
-});
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ MongoDB Connected");
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB Error:", err);
+  });

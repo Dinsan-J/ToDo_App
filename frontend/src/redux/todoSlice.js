@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/api/todos";
+const BASE_URL = "https://to-do-app-eta-neon.vercel.app/api/todos";
 
 export const fetchTodos = createAsyncThunk(
   "todos/fetchTodos",

@@ -26,7 +26,7 @@ export const login = createAsyncThunk(
   async (credentials, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "https://to-do-app-eta-neon.vercel.app/api/auth/login",
         credentials
       );
 
@@ -56,7 +56,7 @@ export const register = createAsyncThunk(
   async (credentials, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://to-do-app-eta-neon.vercel.app/api/auth/register",
         credentials,
         { withCredentials: true }
       );
